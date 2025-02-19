@@ -56,18 +56,18 @@ def main(model_config=None):
         #"state": "train", 
         "state": "eval", 
         "epoch": 300,
-        "batch_size": 25, # batch_size for eval = 25 (maximum for A100 GPU)
+        "batch_size": 25, 
         "T": 500,
         "channel": 128,
-        "channel_mult": [1, 2, 2, 2], # [1, 2, 2]
+        "channel_mult": [1, 2, 2, 2], 
         "num_res_blocks": 2, 
         "dropout": 0.15,
-        "lr": 1e-4, #1e-4,
-        "multiplier": 2, #2.5
+        "lr": 1e-4, 
+        "multiplier": 2,
         "beta_1": 1e-4,
         "beta_T": 0.028,
         "img_size": 128,
-        "grad_clip": 3., #1.
+        "grad_clip": 3., 
         "device": "cuda:0",
         "w": 1.8, 
         "save_weight_dir": "./CheckpointsCondition_large_batch/",
