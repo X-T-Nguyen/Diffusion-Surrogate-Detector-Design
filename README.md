@@ -19,9 +19,9 @@ Reference paper related to the work:
 **Results**  
 DDPM + Classifier Free Guidance:
 
-| Generated Sample | Ground Truth |
+| Ground Truth | Generated Sample |
 |:----------------:|:------------:|
-| <img src="https://raw.githubusercontent.com/Tungcg1906/DenoisingDiffusionProbabilityModel-ddpm-/main/SampledImgs/SampledGuidenceImgs_300.png" alt="Generated Sample" width="300"> | <img src="https://raw.githubusercontent.com/Tungcg1906/DenoisingDiffusionProbabilityModel-ddpm-/main/SampledImgs/ground_truth.png" alt="Ground Truth" width="300"> |
+| <img src="https://raw.githubusercontent.com/Tungcg1906/DDPMs/SampledImgs/ground_truth.png" alt="Ground Truth" width="300"> | <img src="https://raw.githubusercontent.com/Tungcg1906/DDPMs/main/SampledImgs/SampledGuidenceImgs_300.png" alt="Generated Sample" width="300"> | 
 
 
 
