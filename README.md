@@ -2,7 +2,6 @@
 Application of Denoising Diffusion Probability Model on High Energy Physics. The model is trained with a Geant4 simulation dataset. <br>
 <br>
 
-# Conditional DDPM and DDIM Sampler
 
 ## Conditional DDPM
 
