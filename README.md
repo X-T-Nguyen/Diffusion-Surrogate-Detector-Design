@@ -3,20 +3,22 @@ Application of Denoising Diffusion Probability Model on High Energy Physics. The
 <br>
 
 
+# Conditional DDPM and DDIM Sampler
+
 ## Conditional DDPM
 
 During training, the conditional DDPM is optimized with the following objective:
 
 $$
-\mathcal{L} = \mathbb{E}_{x_0,\, y,\, t,\, \epsilon \sim \mathcal{N}(0, I)} \left[ \left\| \epsilon - \epsilon_\theta\left(\sqrt{\bar{\alpha}_t}\, x_0 + \sqrt{1-\bar{\alpha}_t}\, \epsilon,\, t,\, y\right) \right\|^2 \right]
+\mathcal{L} = \mathbb{E}_{x_0,\, y,\, t,\, \epsilon \sim \mathcal{N}(0,I)} \left[ \left\| \epsilon - \epsilon_\theta\Bigl(\sqrt{\bar{\alpha}_t}\, x_0 + \sqrt{1-\bar{\alpha}_t}\, \epsilon,\; t,\; y\Bigr) \right\|^2 \right]
 $$
 
 where:
 - \( x_0 \) is the ground truth image,
 - \( y \) is the conditioning label,
 - \( t \) is the diffusion timestep,
-- \(\epsilon \sim \mathcal{N}(0, I)\) is the Gaussian noise,
-- \(\bar{\alpha}_t = \prod_{s=1}^{t} \alpha_s\) with \(\alpha_t = 1-\beta_t\).
+- \( \epsilon \sim \mathcal{N}(0,I) \) is the Gaussian noise,
+- \( \bar{\alpha}_t = \prod_{s=1}^{t} \alpha_s \) with \( \alpha_t = 1 - \beta_t \).
 
 The reverse (denoising) process is given by:
 
@@ -45,7 +47,7 @@ x_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\, x_0^{\text{pred}} + \sqrt{1-\bar{\alpha}_{
 $$
 
 where:
-- \( z \sim \mathcal{N}(0, I) \) is an optional noise term (used when \(\eta > 0\)); setting \(\eta = 0\) makes the process deterministic.
+- \( z \sim \mathcal{N}(0,I) \) is an optional noise term (used when \( \eta > 0 \)); setting \( \eta = 0 \) makes the process deterministic.
 
 ---
 
