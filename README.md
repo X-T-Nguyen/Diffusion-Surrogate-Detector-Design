@@ -1,55 +1,106 @@
-# Denoising Diffusion Probability Model
+# Conditional Denoising Diffusion Probabilistic Model (DDPM) with DDIM Sampling
 
-Application of Denoising Diffusion Probability Model on High Energy Physics. The model is trained with a Geant4 simulation dataset. <br><br>
+This repository implements a Conditional Denoising Diffusion Probabilistic Model (DDPM) for high-energy physics simulations. The model is conditioned on different initial energy values and learns to simulate the process.
 
-# Conditional DDPM and DDIM Sampler
+## 1. Conditional DDPM Formulation
 
-## Conditional DDPM
+A conditional DDPM models the data distribution $( p(x|y) )$, where $( y )$ is the conditioning variable (e.g., initial energy in our case). The forward diffusion process gradually adds Gaussian noise to the input:
 
-During training, the conditional DDPM is optimized with the following objective:
+$[
+q(x_t | x_{t-1}) = \mathcal{N}(x_t; \sqrt{\alpha_t} x_{t-1}, (1 - \alpha_t) I)
+]$
 
-$$
-\mathcal{L} = \mathbb{E}_{x_0, y, t, \epsilon \sim \mathcal{N}(0,I)} \left[ \left\| \epsilon - \epsilon_\theta\left(\sqrt{\bar{\alpha}_t} x_0 + \sqrt{1-\bar{\alpha}_t} \epsilon, t, y\right) \right\|^2 \right]
-$$
+where $( \alpha_t = 1 - \beta_t )$ is the noise schedule.
 
-where:
-- $x_0$ is the ground truth image,
-- $y$ is the conditioning label,
-- $t$ is the diffusion timestep,
-- $\epsilon \sim \mathcal{N}(0,I)$ is the Gaussian noise,
-- $\bar{\alpha}_t = \prod_{s=1}^{t} \alpha_s$ with $\alpha_t = 1 - \beta_t$.
+The reverse process is parameterized by a neural network $( \epsilon_\theta(x_t, t, y) )$ that estimates the noise added at each step:
 
-The reverse (denoising) process is given by:
+$[
+p_\theta(x_{t-1} | x_t, y) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t, y), \Sigma_\theta(x_t, t, y))
+]$
 
-$$
-x_{t-1} = \sqrt{\bar{\alpha}_{t-1}} x_0^{\text{pred}} + \sqrt{1-\bar{\alpha}_{t-1}} \epsilon,
-$$
+where
 
-with the predicted $x_0$ computed as:
+$[
+\mu_\theta(x_t, t, y) = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \alpha_t \prod_{s=1}^{t-1} \alpha_s}} \epsilon_\theta(x_t, t, y) \right)
+]$
 
-$$
-x_0^{\text{pred}} = \frac{1}{\sqrt{\bar{\alpha}_t}} \left( x_t - \sqrt{1-\bar{\alpha}_t} \epsilon_\theta(x_t, t, y) \right).
-$$
+and $( \Sigma_\theta(x_t, t, y) )$ can be learned or fixed.
 
-## DDIM Sampler
+## 2. DDIM Sampling
 
-In our evaluation, we use a DDIM sampler, which modifies the reverse update. First, we compute the noise scale:
+Instead of using the Gaussian sampling approach in DDPM, DDIM (Denoising Diffusion Implicit Models) reformulates the sampling process to directly update \( x_t \) using:
 
-$$
-\sigma_t = \eta \sqrt{ \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \left( 1 - \frac{\bar{\alpha}_t}{\bar{\alpha}_{t-1}} \right) }
-$$
+$[
+x_{t-1} = \sqrt{\alpha_{t-1}} \hat{x}_0 + \sqrt{1 - \alpha_{t-1} - \sigma_t^2} \epsilon_\theta(x_t, t, y) + \sigma_t \epsilon
+]$
 
-Then, the DDIM update rule is given by:
+where $( \sigma_t \) is computed as:
 
-$$
-x_{t-1} = \sqrt{\bar{\alpha}_{t-1}} x_0^{\text{pred}} + \sqrt{1-\bar{\alpha}_{t-1} - \sigma_t^2} \epsilon + \sigma_t z,
-$$
+$[
+\sigma_t^2 = \eta^2 \frac{(1 - \alpha_{t-1})}{(1 - \alpha_t)} (1 - \alpha_t / \alpha_{t-1})
+]$
 
-where:
-- $z \sim \mathcal{N}(0,I)$ is an optional noise term (used when $\eta > 0$); setting $\eta = 0$ makes the process deterministic.
+- When $( \eta = 0 ), DDIM is **deterministic**.
+- When $( \eta > 0 ), DDIM introduces **stochasticity**, similar to DDPM.
 
+## 3. Implementation
 
+The DDIM sampling method is implemented as follows:
 
+```python
+import torch
+import torch.nn as nn
+
+class DDIMSampler(nn.Module):
+    def __init__(self, model, beta_1, beta_T, T, eta=0.0, ddim_steps=50):
+        super().__init__()
+        self.model = model
+        self.T = T
+        self.eta = eta
+        self.ddim_steps = ddim_steps
+
+        # Create a linear beta schedule
+        self.register_buffer("betas", torch.linspace(beta_1, beta_T, T))
+        self.register_buffer("alphas", 1.0 - self.betas)
+        self.register_buffer("alphas_cumprod", torch.cumprod(self.alphas, dim=0))
+        self.register_buffer("sqrt_alphas_cumprod", torch.sqrt(self.alphas_cumprod))
+        self.register_buffer("sqrt_one_minus_alphas_cumprod", torch.sqrt(1 - self.alphas_cumprod))
+        
+        # Create a mapping from DDIM steps to the original T timesteps
+        self.ddim_timesteps = self.get_ddim_timesteps()
+
+    def get_ddim_timesteps(self):
+        return torch.linspace(0, self.T - 1, self.ddim_steps).long()
+
+    def forward(self, x, labels):
+        for i in reversed(range(len(self.ddim_timesteps))):
+            t = int(self.ddim_timesteps[i].item())
+            t_tensor = torch.full((x.shape[0],), t, device=x.device, dtype=torch.long)
+            eps = self.model(x, t_tensor, labels)
+
+            alpha_t = self.alphas_cumprod[t]
+            sqrt_alpha_t = self.sqrt_alphas_cumprod[t]
+            sqrt_one_minus_alpha_t = self.sqrt_one_minus_alphas_cumprod[t]
+            x0_pred = (x - sqrt_one_minus_alpha_t * eps) / sqrt_alpha_t
+
+            if i > 0:
+                t_prev = int(self.ddim_timesteps[i - 1].item())
+                alpha_prev = self.alphas_cumprod[t_prev]
+            else:
+                alpha_prev = torch.tensor(1.0, device=x.device)
+
+            sigma = self.eta * torch.sqrt(
+                (1 - alpha_prev) / (1 - alpha_t) * (1 - alpha_t / alpha_prev)
+            )
+            noise = torch.randn_like(x) if self.eta > 0 else 0
+
+            x = (
+                torch.sqrt(alpha_prev) * x0_pred +
+                torch.sqrt(1 - alpha_prev - sigma**2) * eps +
+                sigma * noise
+            )
+        return x
+```
 ---
 
 ## Results  
