@@ -21,7 +21,7 @@ DDPM + Classifier Free Guidance:
 
 | Ground Truth | Generated Sample |
 |:----------------:|:------------:|
-| <img src="https://raw.githubusercontent.com/Tungcg1906/DDPMs/SampledImgs/ground_truth.png" alt="Ground Truth" width="300"> | <img src="[https://raw.githubusercontent.com/Tungcg1906/DDPMs/main/SampledImgs/SampledGuidenceImgs_300.png" alt="Generated Sample](https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/SampledGuidenceImgs_300.png)" width="300"> | 
+| <img src="[https://raw.githubusercontent.com/Tungcg1906/DDPMs/SampledImgs/ground_truth.png](https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/ground_truth.png)" alt="Ground Truth" width="300"> | <img src="[https://raw.githubusercontent.com/Tungcg1906/DDPMs/main/SampledImgs/SampledGuidenceImgs_300.png" alt="Generated Sample](https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/SampledGuidenceImgs_300.png)" width="300"> | 
 
 
 
