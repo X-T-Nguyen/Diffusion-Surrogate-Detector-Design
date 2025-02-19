@@ -8,45 +8,47 @@ Application of Denoising Diffusion Probability Model on High Energy Physics. The
 
 During training, the conditional DDPM is optimized with the following objective:
 
-\[
-\mathcal{L} = \mathbb{E}_{x_0,\, y,\, t,\, \epsilon \sim \mathcal{N}(0,I)} \left[ \left\| \epsilon - \epsilon_\theta\Bigl(\sqrt{\bar{\alpha}_t}\, x_0 + \sqrt{1-\bar{\alpha}_t}\, \epsilon,\; t,\; y\Bigr) \right\|^2 \right]
-\]
+$$
+\mathcal{L} = \mathbb{E}_{x_0, y, t, \epsilon \sim \mathcal{N}(0,I)} \left[ \left\| \epsilon - \epsilon_\theta\left(\sqrt{\bar{\alpha}_t} x_0 + \sqrt{1-\bar{\alpha}_t} \epsilon, t, y\right) \right\|^2 \right]
+$$
 
 where:
-- \( x_0 \) is the ground truth image,
-- \( y \) is the conditioning label,
-- \( t \) is the diffusion timestep,
-- \( \epsilon \sim \mathcal{N}(0,I) \) is the Gaussian noise,
-- \( \bar{\alpha}_t = \prod_{s=1}^{t} \alpha_s \) with \( \alpha_t = 1 - \beta_t \).
+- $x_0$ is the ground truth image,
+- $y$ is the conditioning label,
+- $t$ is the diffusion timestep,
+- $\epsilon \sim \mathcal{N}(0,I)$ is the Gaussian noise,
+- $\bar{\alpha}_t = \prod_{s=1}^{t} \alpha_s$ with $\alpha_t = 1 - \beta_t$.
 
 The reverse (denoising) process is given by:
 
-\[
-x_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\, x_0^{\text{pred}} + \sqrt{1-\bar{\alpha}_{t-1}}\, \epsilon,
-\]
+$$
+x_{t-1} = \sqrt{\bar{\alpha}_{t-1}} x_0^{\text{pred}} + \sqrt{1-\bar{\alpha}_{t-1}} \epsilon,
+$$
 
-with the predicted \( x_0 \) computed as:
+with the predicted $x_0$ computed as:
 
-\[
-x_0^{\text{pred}} = \frac{1}{\sqrt{\bar{\alpha}_t}} \left( x_t - \sqrt{1-\bar{\alpha}_t}\, \epsilon_\theta(x_t, t, y) \right).
-\]
+$$
+x_0^{\text{pred}} = \frac{1}{\sqrt{\bar{\alpha}_t}} \left( x_t - \sqrt{1-\bar{\alpha}_t} \epsilon_\theta(x_t, t, y) \right).
+$$
 
 ## DDIM Sampler
 
 In our evaluation, we use a DDIM sampler, which modifies the reverse update. First, we compute the noise scale:
 
-\[
-\sigma_t = \eta\, \sqrt{ \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \left( 1 - \frac{\bar{\alpha}_t}{\bar{\alpha}_{t-1}} \right) }
-\]
+$$
+\sigma_t = \eta \sqrt{ \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \left( 1 - \frac{\bar{\alpha}_t}{\bar{\alpha}_{t-1}} \right) }
+$$
 
 Then, the DDIM update rule is given by:
 
-\[
-x_{t-1} = \sqrt{\bar{\alpha}_{t-1}}\, x_0^{\text{pred}} + \sqrt{1-\bar{\alpha}_{t-1} - \sigma_t^2}\, \epsilon + \sigma_t\, z,
-\]
+$$
+x_{t-1} = \sqrt{\bar{\alpha}_{t-1}} x_0^{\text{pred}} + \sqrt{1-\bar{\alpha}_{t-1} - \sigma_t^2} \epsilon + \sigma_t z,
+$$
 
 where:
-- \( z \sim \mathcal{N}(0,I) \) is an optional noise term (used when \( \eta > 0 \)); setting \( \eta = 0 \) makes the process deterministic.
+- $z \sim \mathcal{N}(0,I)$ is an optional noise term (used when $\eta > 0$); setting $\eta = 0$ makes the process deterministic.
+
+
 
 ---
 
@@ -71,7 +73,4 @@ DDPM + Classifier Free Guidance:
 
 ---
 
-<!-- Add MathJax for proper LaTeX rendering -->
-<script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+
