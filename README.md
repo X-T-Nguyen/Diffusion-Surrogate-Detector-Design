@@ -45,72 +45,62 @@ $[
 - When $( \eta = 0 )$, DDIM is **deterministic**.
 - When $( \eta > 0 )$, DDIM introduces **stochasticity**, similar to DDPM.
 
-## 3. Implementation
-
-The DDIM sampling method is implemented as follows:
+## 3. Model Configuration and Parameters
 
 ```python
-import torch
-import torch.nn as nn
+from DiffusionFreeGuidence.TrainCondition import train, eval
 
-class DDIMSampler(nn.Module):
-    def __init__(self, model, beta_1, beta_T, T, eta=0.0, ddim_steps=50):
-        super().__init__()
-        self.model = model
-        self.T = T
-        self.eta = eta
-        self.ddim_steps = ddim_steps
 
-        # Create a linear beta schedule
-        self.register_buffer("betas", torch.linspace(beta_1, beta_T, T))
-        self.register_buffer("alphas", 1.0 - self.betas)
-        self.register_buffer("alphas_cumprod", torch.cumprod(self.alphas, dim=0))
-        self.register_buffer("sqrt_alphas_cumprod", torch.sqrt(self.alphas_cumprod))
-        self.register_buffer("sqrt_one_minus_alphas_cumprod", torch.sqrt(1 - self.alphas_cumprod))
-        
-        # Create a mapping from DDIM steps to the original T timesteps
-        self.ddim_timesteps = self.get_ddim_timesteps()
+def main(model_config=None):
+    modelConfig = {
+        #"state": "train", 
+        "state": "eval", 
+        "epoch": 300,
+        "batch_size": 25, # batch_size for eval = 25 (maximum for A100 GPU)
+        "T": 500,
+        "channel": 128,
+        "channel_mult": [1, 2, 2, 2], # [1, 2, 2]
+        "num_res_blocks": 2, 
+        "dropout": 0.15,
+        "lr": 1e-4, #1e-4,
+        "multiplier": 2, #2.5
+        "beta_1": 1e-4,
+        "beta_T": 0.028,
+        "img_size": 128,
+        "grad_clip": 3., #1.
+        "device": "cuda:0",
+        "w": 1.8, 
+        "save_weight_dir": "./CheckpointsCondition_large_batch/",
+        "training_load_weight": None,
+        "test_load_weight": "ckpt_300.pt",
+        "sampled_dir": "./Test_img_condition/",
+        "sampledNoisyImgName": "NoisyGuidenceImgs.png",
+        "sampledImgName": "SampledGuidenceImgs.png",
+        "nrow": 5
+    }
+    if model_config is not None:
+        modelConfig = model_config
+    if modelConfig["state"] == "train":
+        train(modelConfig)
+    else:
+        eval(modelConfig)
 
-    def get_ddim_timesteps(self):
-        return torch.linspace(0, self.T - 1, self.ddim_steps).long()
 
-    def forward(self, x, labels):
-        for i in reversed(range(len(self.ddim_timesteps))):
-            t = int(self.ddim_timesteps[i].item())
-            t_tensor = torch.full((x.shape[0],), t, device=x.device, dtype=torch.long)
-            eps = self.model(x, t_tensor, labels)
-
-            alpha_t = self.alphas_cumprod[t]
-            sqrt_alpha_t = self.sqrt_alphas_cumprod[t]
-            sqrt_one_minus_alpha_t = self.sqrt_one_minus_alphas_cumprod[t]
-            x0_pred = (x - sqrt_one_minus_alpha_t * eps) / sqrt_alpha_t
-
-            if i > 0:
-                t_prev = int(self.ddim_timesteps[i - 1].item())
-                alpha_prev = self.alphas_cumprod[t_prev]
-            else:
-                alpha_prev = torch.tensor(1.0, device=x.device)
-
-            sigma = self.eta * torch.sqrt(
-                (1 - alpha_prev) / (1 - alpha_t) * (1 - alpha_t / alpha_prev)
-            )
-            noise = torch.randn_like(x) if self.eta > 0 else 0
-
-            x = (
-                torch.sqrt(alpha_prev) * x0_pred +
-                torch.sqrt(1 - alpha_prev - sigma**2) * eps +
-                sigma * noise
-            )
-        return x
+if __name__ == '__main__':
+    main()
 ```
 ---
 
 ## Results  
-DDPM + Classifier Free Guidance:
+Classifier Free Guidance DDPM:
 
 | Ground Truth | Generated Sample |
 |:------------:|:----------------:|
 | <img src="https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/ground_truth.png" alt="Ground Truth" width="300"> | <img src="https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/SampledGuidenceImgs_300.png" alt="Generated Sample" width="300"> |
+
+Metrics evvaluation:
+
+<img src="https://github.com/Tungcg1906/DDPMs/blob/main/evaluation_results/metrics_vs_epoch.png" alt="metric" width="800">
 
 ---
 
