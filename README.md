@@ -96,7 +96,7 @@ Classifier Free Guidance DDPM:
 
 | Ground Truth | Generated Sample |
 |:------------:|:----------------:|
-| <img src="https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/ground_truth.png" alt="Ground Truth" width="300"> | <img src="https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/SampledGuidenceImgs_300.png" alt="Generated Sample" width="300"> |
+| <img src="https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/ground_truth.png" alt="Ground Truth" width="350"> | <img src="https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/SampledGuidenceImgs_300.png" alt="Generated Sample" width="350"> |
 
 Metrics evvaluation:
 
