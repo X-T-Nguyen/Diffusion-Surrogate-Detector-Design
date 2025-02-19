@@ -40,8 +40,8 @@ $[
 \sigma_t^2 = \eta^2 \frac{(1 - \alpha_{t-1})}{(1 - \alpha_t)} (1 - \alpha_t / \alpha_{t-1})
 ]$
 
-- When $( \eta = 0 ), DDIM is **deterministic**.
-- When $( \eta > 0 ), DDIM introduces **stochasticity**, similar to DDPM.
+- When $( \eta = 0 )$, DDIM is **deterministic**.
+- When $( \eta > 0 )$, DDIM introduces **stochasticity**, similar to DDPM.
 
 ## 3. Implementation
 
