@@ -2,7 +2,7 @@
 
 This repository implements a Conditional Denoising Diffusion Probabilistic Model (DDPM) for high-energy physics simulations. The model is conditioned on different initial energy values and learns to simulate the process.
 
-## 1. Conditional DDPM Formulation
+## 1. Conditional DDPM 
 
 A conditional DDPM models the data distribution $( p(x|y) )$, where $( y )$ is the conditioning variable (e.g., initial energy in our case). The forward diffusion process gradually adds Gaussian noise to the input:
 
@@ -30,7 +30,7 @@ and $( \Sigma_\theta(x_t, t, y) )$ can be learned or fixed.
 
 ## 2. DDIM Sampling
 
-Instead of using the Gaussian sampling approach in DDPM, DDIM (Denoising Diffusion Implicit Models) reformulates the sampling process to directly update \( x_t \) using:
+Instead of using the Gaussian sampling approach in DDPM, DDIM (Denoising Diffusion Implicit Models) reformulates the sampling process to directly update $( x_t )$ using:
 
 $[
 x_{t-1} = \sqrt{\alpha_{t-1}} \hat{x}_0 + \sqrt{1 - \alpha_{t-1} - \sigma_t^2} \epsilon_\theta(x_t, t, y) + \sigma_t \epsilon
