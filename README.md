@@ -8,42 +8,43 @@ A conditional DDPM models the data distribution $( p(x|y) )$, where $( y )$ is t
 
  <img src="https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/ddpm-model.png" alt="ddpm" width="800">
 
-$[
+$$
 q(x_t | x_{t-1}) = \mathcal{N}(x_t; \sqrt{\alpha_t} x_{t-1}, (1 - \alpha_t) I)
-]$
+$$
 
-where $( \alpha_t = 1 - \beta_t )$ is the noise schedule.
+where $[ \alpha_{t} = 1 - \beta_{t} ]$ is the noise schedule.
 
-The reverse process is parameterized by a neural network $( \epsilon_\theta(x_t, t, y) )$ that estimates the noise added at each step:
+The reverse process is parameterized by a neural network $[ \epsilon_\theta(x_t, t, y) ]$ that estimates the noise added at each step:
 
-$[
+$$
 p_\theta(x_{t-1} | x_t, y) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t, y), \Sigma_\theta(x_t, t, y))
-]$
+$$
 
-where
+where  
 
-$[
+$$
 \mu_\theta(x_t, t, y) = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \alpha_t \prod_{s=1}^{t-1} \alpha_s}} \epsilon_\theta(x_t, t, y) \right)
-]$
+$$
 
-and $( \Sigma_\theta(x_t, t, y) )$ can be learned or fixed.
+and $[ \Sigma_\theta(x_t, t, y) ]$ can be learned or fixed.
 
 ## 2. DDIM Sampling
 
-Instead of using the Gaussian sampling approach in DDPM, DDIM (Denoising Diffusion Implicit Models) reformulates the sampling process to directly update $( x_t )$ using:
+Instead of using the Gaussian sampling approach in DDPM, DDIM (Denoising Diffusion Implicit Models) reformulates the sampling process to directly update $$ x_t $$ using:
 
-$[
-x_{t-1} = \sqrt{\alpha_{t-1}} \hat{x}_0 + \sqrt{1 - \alpha_{t-1} - \sigma_t^2} \epsilon_\theta(x_t, t, y) + \sigma_t \epsilon
-]$
+$$
+x_{t-1} = \sqrt{\alpha_{t-1}} \hat{x_{0}} + \sqrt{1 - \alpha_{t-1} - \sigma_t^2} \epsilon_\theta(x_t, t, y) + \sigma_t \epsilon
+$$
 
-where $( \sigma_t \) is computed as:
+where $[ \sigma_t ]$ is computed as:
 
-$[
+$$
 \sigma_t^2 = \eta^2 \frac{(1 - \alpha_{t-1})}{(1 - \alpha_t)} (1 - \alpha_t / \alpha_{t-1})
-]$
+$$
 
-- When $( \eta = 0 )$, DDIM is **deterministic**.
-- When $( \eta > 0 )$, DDIM introduces **stochasticity**, similar to DDPM.
+- When $[ \eta = 0 ]$, DDIM is **deterministic**.
+- When $[ \eta > 0 ]$, DDIM introduces **stochasticity**, similar to DDPM.
+
 
 ## 3. Model Configuration and Parameters
 
