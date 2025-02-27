@@ -1,6 +1,6 @@
 # Conditional Denoising Diffusion Probabilistic Model in High Energy Physics
 
-This repository implements a Conditional Denoising Diffusion Probabilistic Model (DDPM) for high-energy physics simulations. The model is conditioned on different initial energy values and learns to simulate the process.
+This repository implements a Conditional Denoising Diffusion Probabilistic Model (DDPM) for high-energy physics simulations. The model is conditioned on different initial energy values, cuboid's sizes and learns to simulate the process.
 
 ## 1. Conditional DDPM 
 
