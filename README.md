@@ -4,7 +4,7 @@ This repository implements a Conditional Denoising Diffusion Probabilistic Model
 
 ## 1. Conditional DDPM 
 
-A conditional DDPM models the data distribution $( p(x|y) )$, where $( y )$ is the conditioning variable (e.g., initial energy in our case). The forward diffusion process gradually adds Gaussian noise to the input:
+A conditional DDPM models the data distribution $( p(x|y) )$, where $( y )$ is the conditioning variable (e.g., initial energy, cuboid's size in our case). The forward diffusion process gradually adds Gaussian noise to the input:
 
  <img src="https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/ddpm-model.png" alt="ddpm" width="800">
 
