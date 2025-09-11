@@ -99,9 +99,6 @@ Classifier Free Guidance DDPM:
 |:------------:|:----------------:|
 | <img src="https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/ground_truth.png" alt="Ground Truth" width="350"> | <img src="https://github.com/Tungcg1906/DDPMs/blob/main/SampleImgs/SampledGuidenceImgs_300.png" alt="Generated Sample" width="350"> |
 
-Metrics evvaluation:
-
-<img src="https://github.com/Tungcg1906/DDPMs/blob/main/evaluation_results/metrics_vs_epoch.png" alt="metric" width="800">
 
 ---
 
