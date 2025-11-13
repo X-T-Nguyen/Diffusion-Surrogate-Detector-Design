@@ -94,5 +94,5 @@ If you use this code in your research, please cite:
 ```
 
 ## Acknowledgments
-This work was supported by the MODE Collaboration and the Alliance for High Performance Computing in Rhineland-Palatinate (AHRP) via the Elwetritsch cluster at RPTU Kaiserslautern-Landau.
+This work was supported by the [MODE Collaboration](https://mode-collaboration.github.io/) and the Alliance for High Performance Computing in Rhineland-Palatinate (AHRP) via the Elwetritsch cluster at RPTU Kaiserslautern-Landau.
 
