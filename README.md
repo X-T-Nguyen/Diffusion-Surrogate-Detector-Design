@@ -16,9 +16,12 @@ The project provides a conditional denoising-diffusion probabilistic model (DDPM
 ## Table of Contents
 - [Installation](#installation)
 - [Data](#data)
+- [Training](#training)
+- [Evaluation](#evaluation)
+
 
 ## Installation
-```
+```bash
 git clone https://github.com/X-T-Nguyen/Diffusion-Surrogate-Detector-Design.git
 cd Diffusion-Surrogate-Detector-Design
 conda create -n diff-surrogate python=3.10
@@ -27,5 +30,25 @@ pip install -r requirements.txt
 ```
 
 ## Data
-The dataset used in this work is publicly available on Zenodo: 📦 https://doi.org/10.5281/zenodo.17105137
+The dataset used in this work is publicly available on Zenodo: https://doi.org/10.5281/zenodo.17105137
+
+## Training
+Pre-training:
+```bash
+python MainCondition.py
+```
+
+Post-training:
+```bash
+fine_tune.py
+```
+
+## Evaluation:
+The evaluation scripts are provided to assess model performance and generate key analysis outputs. These include:
+- Generation of calorimeter shower images from the DDPM
+- Visual comparison between generated and ground-truth showers
+- Computation and plotting of longitudinal and transverse energy profiles
+- Evaluation of physical fidelity metrics
+- Gradient-based analysis comparing the foundation model and the post-trained model
+
 
