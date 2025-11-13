@@ -9,11 +9,7 @@ The project provides a conditional denoising-diffusion probabilistic model (DDPM
 
 ---
 
-## Features
+## Table of Contents
 
-- **Pre-trained conditional DDPM**: Generates showers for various calorimeter geometries and energies.
-- **Low-Rank Adaptation (LoRA) modules**: Enables efficient fine-tuning for new detector configurations.
-- **Differentiable surrogate**: Supports gradient-based optimization of detector design.
-- **Evaluation metrics**: Total energy, energy-weighted radius, and shower dispersion.
 
 
