@@ -40,15 +40,44 @@ python MainCondition.py
 
 Post-training:
 ```bash
-fine_tune.py
+python fine_tune.py
 ```
 
 ## Evaluation:
 The evaluation scripts are provided to assess model performance and generate key analysis outputs. These include:
-- Generation of calorimeter shower images from the DDPM
-- Visual comparison between generated and ground-truth showers
-- Computation and plotting of longitudinal and transverse energy profiles
-- Evaluation of physical fidelity metrics
-- Gradient-based analysis comparing the foundation model and the post-trained model
+
+<details>
+<summary><b>Visual comparison between generated and ground-truth showers</b></summary>
+  
+```bash
+python shower_plot.py
+```
+</details> 
+
+<details>
+<summary><b>Computation and plotting of longitudinal and transverse energy profiles</b></summary>
+  
+```bash
+python edep_plot.py
+```
+</details> 
+
+
+<details>
+<summary><b>Evaluation of physical fidelity metrics</b></summary>
+  
+```bash
+python metric_plot.py
+```
+</details> 
+
+<details>
+<summary><b>Gradient-based analysis comparing the foundation model and the post-trained model</b></summary>
+  
+```bash
+python grad_plot.py
+```
+</details> 
+ 
 
 
