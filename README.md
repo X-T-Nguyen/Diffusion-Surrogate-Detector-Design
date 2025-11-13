@@ -19,7 +19,7 @@ The project provides a conditional denoising-diffusion probabilistic model (DDPM
 - [Training](#training)
 - [Evaluation](#evaluation)
 - [Citation](#citation)
-- [Acknowledgments](acknowledgments)
+- [Acknowledgments](#acknowledgments)
 
 
 ## Installation
