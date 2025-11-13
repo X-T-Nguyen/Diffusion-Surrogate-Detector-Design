@@ -18,6 +18,8 @@ The project provides a conditional denoising-diffusion probabilistic model (DDPM
 - [Data](#data)
 - [Training](#training)
 - [Evaluation](#evaluation)
+- [Citation](#citation)
+- [Acknowledgments](acknowledgments)
 
 
 ## Installation
@@ -78,6 +80,19 @@ python metric_plot.py
 python grad_plot.py
 ```
 </details> 
- 
 
+## Citation
+If you use this code in your research, please cite:
+
+```bibtex
+@article{nguyen2025diffsurrogate,
+  title={Differentiable Surrogate for Detector Simulation and Design with Diffusion Models},
+  author={Nguyen, Xuan Tung and Chen, Long and Dorigo, Tommaso and Gauger, Nicolas R. and others},
+  year={2025},
+  journal={tbd},
+
+```
+
+## Acknowledgments
+This work was supported by the MODE Collaboration and the Alliance for High Performance Computing in Rhineland-Palatinate (AHRP) via the Elwetritsch cluster at RPTU Kaiserslautern-Landau.
 
