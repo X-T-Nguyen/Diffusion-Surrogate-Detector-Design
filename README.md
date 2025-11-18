@@ -27,7 +27,7 @@ The project provides a conditional denoising-diffusion probabilistic model (DDPM
 ```bash
 git clone https://github.com/X-T-Nguyen/Diffusion-Surrogate-Detector-Design.git
 cd Diffusion-Surrogate-Detector-Design
-conda create -n diff-surrogate python=3.10
+conda create -n diff-surrogate python=3.11
 conda activate diff-surrogate
 pip install -r requirements.txt
 ```
